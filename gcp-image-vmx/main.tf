@@ -17,7 +17,7 @@ resource "google_compute_image" "this" {
     }
   }
 
-  licenses = concat(var.licenses, [
+  licenses = concat(var.image_licenses, [
     "https://www.googleapis.com/compute/v1/projects/vm-options/global/licenses/enable-vmx"
   ])
 }
