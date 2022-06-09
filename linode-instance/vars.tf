@@ -50,3 +50,50 @@ variable "private_networking" {
   type        = bool
   default     = false
 }
+
+variable "disks" {
+  description = "The list of disks for this instance."
+  type = list(object({
+    name       = string
+    filesystem = string
+    image      = string
+    size       = number
+  }))
+  default = []
+}
+
+variable "configs" {
+  description = "The list of configurations for this instance."
+  type = list(object({
+    name        = string
+    kernel      = string
+    virt_mode   = string
+    root_device = string
+    disks       = map(map(string))
+    helpers     = map(string)
+  }))
+
+  default = []
+}
+
+variable "volumes" {
+  description = "The list of additional volumes for this instance."
+  type = list(object({
+    name = string
+    size = number
+  }))
+
+  default = []
+}
+
+variable "booted" {
+  description = "Boot the machine after creation."
+  type        = bool
+  default     = true
+}
+
+variable "boot_config" {
+  description = "The name of configuration to use for boot."
+  type        = string
+  default     = ""
+}
