@@ -5,10 +5,12 @@ resource "google_compute_network" "this" {
   name    = var.network_name
   project = data.google_project.this.project_id
 
-  auto_create_subnetworks = false
+  auto_create_subnetworks = var.auto_create_subnetworks
 }
 
 resource "google_compute_subnetwork" "this" {
+  count = var.auto_create_subnetworks ? 0 : 1
+
   name = (
     var.subnetwork_name != "" ?
     var.subnetwork_name :

@@ -7,9 +7,17 @@ output "network_id" {
 }
 
 output "subnetwork_self_link" {
-  value = google_compute_subnetwork.this.self_link
+  value = (
+    length(google_compute_subnetwork.this) > 0 ?
+    google_compute_subnetwork.this[0].self_link :
+    null
+  )
 }
 
 output "subnetwork_id" {
-  value = google_compute_subnetwork.this.id
+  value = (
+    length(google_compute_subnetwork.this) > 0 ?
+    google_compute_subnetwork.this[0].id :
+    null
+  )
 }

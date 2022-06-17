@@ -19,3 +19,9 @@ variable "network_cidr" {
   type        = string
   default     = "192.168.64.0/20"
 }
+
+variable "auto_create_subnetworks" {
+  description = "Automatically create subnetworks."
+  type        = bool
+  default     = false
+}
