@@ -70,6 +70,12 @@ variable "subnetwork" {
   default     = ""
 }
 
+variable "network_allow_icmp" {
+  description = "Enables ICMP for this VM."
+  type        = bool
+  default     = false
+}
+
 variable "network_allow_tcp" {
   description = "The list of TCP ports or ranges to open for this VM."
   type        = list(string)

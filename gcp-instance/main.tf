@@ -4,6 +4,13 @@ data "google_project" "this" {
 data "google_compute_default_service_account" "this" {
 }
 
+locals {
+  has_tcp  = length(var.network_allow_tcp) > 0
+  has_udp  = length(var.network_allow_udp) > 0
+  has_icmp = var.network_allow_icmp
+  has_fw   = local.has_tcp || local.has_udp || local.has_icmp
+}
+
 resource "google_compute_disk" "this" {
   for_each = { for v in var.attached_disks : v.name => v }
 
@@ -14,18 +21,33 @@ resource "google_compute_disk" "this" {
 }
 
 resource "google_compute_firewall" "this" {
+  count = local.has_fw ? 1 : 0
+
   name    = "${var.name}-default"
   project = data.google_project.this.project_id
   network = var.network
 
-  allow {
-    protocol = "tcp"
-    ports    = var.network_allow_tcp
+  dynamic "allow" {
+    for_each = local.has_icmp ? [1] : []
+    content {
+      protocol = "icmp"
+    }
   }
 
-  allow {
-    protocol = "udp"
-    ports    = var.network_allow_udp
+  dynamic "allow" {
+    for_each = local.has_tcp ? [1] : []
+    content {
+      protocol = "tcp"
+      ports    = var.network_allow_tcp
+    }
+  }
+
+  dynamic "allow" {
+    for_each = local.has_udp ? [1] : []
+    content {
+      protocol = "udp"
+      ports    = var.network_allow_udp
+    }
   }
 
   source_ranges = [
@@ -43,7 +65,14 @@ resource "google_compute_instance" "this" {
   zone         = var.gcp_zone
   machine_type = var.machine_type
 
-  tags = concat(var.network_tags, ["${var.name}-default"])
+  tags = concat(
+    var.network_tags,
+    (
+      local.has_fw ?
+      ["${var.name}-default"] :
+      []
+    )
+  )
 
   allow_stopping_for_update = var.allow_stopping_for_update
 
