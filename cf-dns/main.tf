@@ -107,5 +107,6 @@ resource "cloudflare_record" "this" {
   ttl      = each.value.ttl
   type     = each.value.type
   priority = each.value.priority
+  proxied  = each.value.proxied
   value    = each.value.rrdata
 }
