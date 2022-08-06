@@ -44,3 +44,14 @@ variable "lifecycle_rules" {
 
   default = []
 }
+
+variable "iam" {
+  description = "The list of IAM member and roles to bind to the bucket."
+
+  type = list(object({
+    role    = string
+    members = list(string)
+  }))
+
+  default = []
+}

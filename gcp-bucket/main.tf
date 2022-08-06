@@ -41,3 +41,11 @@ resource "google_storage_bucket" "this" {
     enabled = var.versioning_enabled
   }
 }
+
+resource "google_storage_bucket_iam_binding" "this" {
+  for_each = { for m in var.iam : "${m.role}" => m }
+
+  bucket  = google_storage_bucket.this.name
+  role    = each.value.role
+  members = each.value.members
+}
