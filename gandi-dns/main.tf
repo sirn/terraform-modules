@@ -4,7 +4,6 @@ locals {
 
 resource "gandi_livedns_domain" "this" {
   name = local.domain_name
-  ttl  = var.default_ttl
 
   lifecycle {
     ignore_changes = [
