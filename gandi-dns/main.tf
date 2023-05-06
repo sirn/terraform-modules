@@ -7,7 +7,6 @@ resource "gandi_livedns_domain" "this" {
 
   lifecycle {
     ignore_changes = [
-      ttl,
       automatic_snapshots,
     ]
   }
