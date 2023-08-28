@@ -7,11 +7,12 @@ data "google_container_engine_versions" "this" {
 }
 
 resource "google_container_cluster" "this" {
-  name         = var.name
-  project      = data.google_project.this.project_id
-  location     = var.gcp_location != "" ? var.gcp_location : var.gcp_zone
-  network      = var.network
-  node_version = data.google_container_engine_versions.this.latest_node_version
+  name               = var.name
+  project            = data.google_project.this.project_id
+  location           = var.gcp_location != "" ? var.gcp_location : var.gcp_zone
+  network            = var.network
+  node_version       = data.google_container_engine_versions.this.latest_node_version
+  min_master_version = data.google_container_engine_versions.this.latest_node_version
 
   dynamic "workload_identity_config" {
     for_each = (var.workload_identity_enabled ? [1] : [])
