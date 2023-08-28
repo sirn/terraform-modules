@@ -11,7 +11,6 @@ resource "google_container_cluster" "this" {
   project            = data.google_project.this.project_id
   location           = var.gcp_location != "" ? var.gcp_location : var.gcp_zone
   network            = var.network
-  node_version       = data.google_container_engine_versions.this.latest_node_version
   min_master_version = data.google_container_engine_versions.this.latest_node_version
 
   # We can't create a cluster with no node pool defined, but we want to only use
