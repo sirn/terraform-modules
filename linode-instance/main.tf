@@ -156,7 +156,6 @@ resource "linode_instance" "this" {
     ignore_changes = [
       booted,
       authorized_keys,
-      backups,
       swap_size,
     ]
   }
