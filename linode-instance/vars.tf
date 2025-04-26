@@ -21,12 +21,6 @@ variable "machine_image" {
   default     = ""
 }
 
-variable "machine_group" {
-  description = "The group for the VM."
-  type        = string
-  default     = ""
-}
-
 variable "machine_tags" {
   description = "The list of tags for the VM."
   type        = list(string)
