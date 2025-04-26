@@ -21,23 +21,11 @@ resource "linode_instance" "this" {
   image  = var.machine_image != "" ? var.machine_image : null
   type   = var.machine_type
 
-  authorized_keys = length(var.disks) == 0 ? local.ssh_keys : null
+  authorized_keys = length(local.disks) == 0 ? local.ssh_keys : null
   private_ip      = var.private_networking
 
   group = var.machine_group != "" ? var.machine_group : null
   tags  = var.machine_tags
-
-  dynamic "disk" {
-    for_each = var.disks
-
-    content {
-      label           = disk.value.name
-      size            = disk.value.size
-      filesystem      = disk.value.filesystem
-      image           = disk.value.image != "" ? disk.value.image : null
-      authorized_keys = local.ssh_keys
-    }
-  }
 
   dynamic "config" {
     for_each = var.configs
@@ -159,6 +147,17 @@ resource "linode_instance" "this" {
       swap_size,
     ]
   }
+}
+
+resource "linode_instance_disk" "this" {
+  for_each  = { for v in var.disks : v.label => v }
+  linode_id = linode_instance.this
+
+  label           = each.value.name
+  size            = each.value.size
+  filesystem      = each.value.filesystem
+  image           = each.value.image != "" ? each.value.image : null
+  authorized_keys = local.ssh_keys
 }
 
 resource "linode_volume" "this" {
