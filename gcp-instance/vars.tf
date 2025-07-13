@@ -100,6 +100,12 @@ variable "nat_ip" {
   default     = ""
 }
 
+variable "network_tier" {
+  description = "The networking tier for the external IP. PREMIUM or STANDARD."
+  type        = string
+  default     = "PREMIUM"
+}
+
 variable "attached_disks" {
   description = "The list of attached disks for this instance."
   type = list(object({
