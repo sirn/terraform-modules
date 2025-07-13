@@ -91,7 +91,8 @@ resource "google_compute_instance" "this" {
     subnetwork = var.subnetwork != "" ? var.subnetwork : null
 
     access_config {
-      nat_ip = var.nat_ip != "" ? var.nat_ip : null
+      nat_ip       = var.nat_ip != "" ? var.nat_ip : null
+      network_tier = var.network_tier
     }
   }
 
