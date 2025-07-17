@@ -96,7 +96,7 @@ locals {
   records = concat(local.other_records, local.mx_records)
 }
 
-resource "cloudflare_record" "this" {
+resource "cloudflare_dns_record" "this" {
   for_each = {
     for v in local.records :
     v.key => v.value
