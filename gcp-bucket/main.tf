@@ -40,6 +40,14 @@ resource "google_storage_bucket" "this" {
   versioning {
     enabled = var.versioning_enabled
   }
+
+  dynamic "website" {
+    for_each = var.website_enabled ? [1] : []
+    content {
+      main_page_suffix = var.website_main_page_suffix
+      not_found_page   = var.website_not_found_page != "" ? var.website_not_found_page : null
+    }
+  }
 }
 
 resource "google_storage_bucket_iam_binding" "this" {
