@@ -3,7 +3,12 @@ locals {
 }
 
 resource "cloudflare_zone" "this" {
-  zone = local.domain_name
+  account = {
+    id = var.account_id
+  }
+
+  name = local.domain_name
+  type = var.zone_type
 }
 
 // Due to Cloudflare API treating each record as its own entity
@@ -57,16 +62,18 @@ locals {
           name = (
             v.name == "@" ?
             local.domain_name :
-            v.name
+            "${v.name}.${local.domain_name}"
           ),
           type     = v.type,
-          ttl      = v.ttl,
+          ttl      = lookup(v, "proxied", false) ? 1 : v.ttl,
           proxied  = lookup(v, "proxied", false),
           priority = 0,
           rrdata   = rr,
+          flags    = null,
+          tag      = null,
         },
       }
-    ] if v.type != "MX"
+    ] if v.type != "MX" && v.type != "CAA"
   ])
 
   // MX record requires priority argument, but we're using the same
@@ -81,11 +88,13 @@ locals {
             name = (
               v.name == "@" ?
               local.domain_name :
-              v.name
+              "${v.name}.${local.domain_name}"
             ),
             type    = v.type,
             ttl     = v.ttl,
             proxied = false,
+            flags   = null,
+            tag     = null,
           },
           regex("^(?P<priority>[0-9]+) (?P<rrdata>.*)$", rr),
         ),
@@ -93,9 +102,36 @@ locals {
     ] if v.type == "MX"
   ])
 
-  records = concat(local.other_records, local.mx_records)
+  // CAA record requires tag argument, but we're using the same
+  // "10 tag domain" format as all other DNS modules, so some
+  // gymnastic is required.
+  caa_records = flatten([
+    for v in var.record_sets : [
+      for idx, rr in v.rrdatas : {
+        key = "${v.name}/${v.type}/${idx + 1}",
+        value = merge(
+          {
+            name = (
+              v.name == "@" ?
+              local.domain_name :
+              "${v.name}.${local.domain_name}"
+            ),
+            type     = v.type,
+            ttl      = v.ttl,
+            priority = 0,
+            proxied  = false,
+          },
+          regex("^(?P<flags>[0-9]+) (?P<tag>[a-zA-Z0-9]+) \"(?P<rrdata>[^\"]+)\"$", rr),
+        ),
+      }
+    ] if v.type == "CAA"
+  ])
+
+  records = concat(local.other_records, local.mx_records, local.caa_records)
 }
 
+# Cloudflare Provider v5 is horrible, live with it
+# https://github.com/cloudflare/terraform-provider-cloudflare/issues/5517
 resource "cloudflare_dns_record" "this" {
   for_each = {
     for v in local.records :
@@ -108,5 +144,18 @@ resource "cloudflare_dns_record" "this" {
   type     = each.value.type
   priority = each.value.priority
   proxied  = each.value.proxied
-  value    = each.value.rrdata
+  content  = each.value.flags != null ? null : each.value.rrdata
+
+  tags     = []
+  settings = {
+    flatten_cname = false
+    ipv4_only     = false
+    ipv6_only     = false
+  }
+
+  data = each.value.flags != null ? {
+    flags = each.value.flags
+    tag   = each.value.tag
+    value = each.value.rrdata
+  } : null
 }
