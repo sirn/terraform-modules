@@ -55,3 +55,21 @@ variable "iam" {
 
   default = []
 }
+
+variable "website_enabled" {
+  description = "Enable static website hosting for the bucket."
+  type        = bool
+  default     = false
+}
+
+variable "website_main_page_suffix" {
+  description = "The index document for the website."
+  type        = string
+  default     = "index.html"
+}
+
+variable "website_not_found_page" {
+  description = "The 404 page for the website."
+  type        = string
+  default     = ""
+}
