@@ -2,7 +2,14 @@ locals {
   domain_name = trimsuffix(var.domain_name, ".")
 }
 
+data "cloudflare_account" "this" {
+  account_id = var.cloudflare_account_id
+}
+
 resource "cloudflare_zone" "this" {
+  account = {
+    id = data.cloudflare_account.this.account_id
+  }
   zone = local.domain_name
 }
 
