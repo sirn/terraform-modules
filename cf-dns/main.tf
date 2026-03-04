@@ -142,16 +142,12 @@ resource "cloudflare_dns_record" "this" {
   name     = each.value.name
   ttl      = each.value.ttl
   type     = each.value.type
-  priority = each.value.priority
+  priority = each.value.type == "MX" ? each.value.priority : null
   proxied  = each.value.proxied
   content  = each.value.flags != null ? null : each.value.rrdata
 
   tags     = []
-  settings = {
-    flatten_cname = false
-    ipv4_only     = false
-    ipv6_only     = false
-  }
+  settings = {}
 
   data = each.value.flags != null ? {
     flags = each.value.flags
