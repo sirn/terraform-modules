@@ -21,7 +21,29 @@ variable "record_sets" {
 }
 
 # ----------------------------------------
-# Security Settings
+# Feature Flags
+# ----------------------------------------
+
+variable "enable_ssl" {
+  description = "Enable SSL/TLS settings (ssl, always_use_https, automatic_https_rewrites). Requires Zone:Edit permission."
+  type        = bool
+  default     = false
+}
+
+variable "enable_protection" {
+  description = "Enable content protection settings (security_level, email_obfuscation, hotlink_protection). Requires Zone:Edit permission."
+  type        = bool
+  default     = false
+}
+
+variable "enable_performance" {
+  description = "Enable performance settings (minify). Requires Zone:Edit permission."
+  type        = bool
+  default     = false
+}
+
+# ----------------------------------------
+# Security Settings (Zone Settings API)
 # ----------------------------------------
 
 variable "security_level" {
@@ -30,26 +52,11 @@ variable "security_level" {
   default     = "medium"
 }
 
-variable "browser_integrity_check" {
-  description = "Enable browser integrity check"
-  type        = bool
-  default     = true
-}
-
-variable "bot_fight_mode" {
-  description = "Enable Bot Fight Mode"
-  type        = bool
-  default     = true
-}
-
-variable "block_ai_bots" {
-  description = "Block AI training bots (false = allow AI crawlers)"
-  type        = bool
-  default     = true
-}
+# Note: Browser Integrity Check is configured via Configuration Rules, not Zone Settings
+# It must be set up separately if needed.
 
 # ----------------------------------------
-# Content Protection
+# Content Protection (Zone Settings API)
 # ----------------------------------------
 
 variable "email_obfuscation" {
@@ -65,7 +72,7 @@ variable "hotlink_protection" {
 }
 
 # ----------------------------------------
-# SSL/TLS Settings
+# SSL/TLS Settings (Zone Settings API)
 # ----------------------------------------
 
 variable "ssl_mode" {
@@ -87,23 +94,23 @@ variable "automatic_https_rewrites" {
 }
 
 # ----------------------------------------
-# Performance Settings
+# Performance Settings (Zone Settings API)
 # ----------------------------------------
 
 variable "minify_css" {
-  description = "Minify CSS"
+  description = "Minify CSS via Auto Minify"
   type        = bool
   default     = false
 }
 
 variable "minify_js" {
-  description = "Minify JavaScript"
+  description = "Minify JavaScript via Auto Minify"
   type        = bool
   default     = false
 }
 
 variable "minify_html" {
-  description = "Minify HTML"
+  description = "Minify HTML via Auto Minify"
   type        = bool
   default     = false
 }
