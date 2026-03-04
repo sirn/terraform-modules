@@ -1,4 +1,11 @@
-# Performance settings
+resource "cloudflare_zone_setting" "minify" {
+  count = var.enable_performance ? 1 : 0
 
-# Note: Minification is not available via the zone settings API with the
-# current provider. This must be configured manually in the Cloudflare dashboard.
+  zone_id    = cloudflare_zone.this.id
+  setting_id = "minify"
+  value = {
+    css  = local.bool_to_onoff[var.minify_css]
+    js   = local.bool_to_onoff[var.minify_js]
+    html = local.bool_to_onoff[var.minify_html]
+  }
+}
