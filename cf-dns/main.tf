@@ -1,5 +1,11 @@
 locals {
   domain_name = trimsuffix(var.domain_name, ".")
+
+  # Convert booleans to "on"/"off" strings for Cloudflare API
+  bool_to_onoff = {
+    true  = "on"
+    false = "off"
+  }
 }
 
 resource "cloudflare_zone" "this" {
