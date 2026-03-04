@@ -65,22 +65,6 @@ variable "hotlink_protection" {
 }
 
 # ----------------------------------------
-# Page Shield & API Shield
-# ----------------------------------------
-
-variable "page_shield_enabled" {
-  description = "Enable Page Shield (continuous script monitoring)"
-  type        = bool
-  default     = true
-}
-
-variable "api_shield_enabled" {
-  description = "Enable API Shield (schema validation)"
-  type        = bool
-  default     = false
-}
-
-# ----------------------------------------
 # SSL/TLS Settings
 # ----------------------------------------
 
