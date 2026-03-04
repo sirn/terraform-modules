@@ -1,23 +1,8 @@
 # Security and content protection settings
 
-resource "cloudflare_zone_setting" "browser_integrity_check" {
-  zone_id    = cloudflare_zone.this.id
-  setting_id = "browser_integrity_check"
-  value      = local.bool_to_onoff[var.browser_integrity_check]
-}
-
-resource "cloudflare_zone_setting" "bot_fight_mode" {
-  zone_id    = cloudflare_zone.this.id
-  setting_id = "bot_fight_mode"
-  value      = local.bool_to_onoff[var.bot_fight_mode]
-}
-
-resource "cloudflare_zone_setting" "block_ai_bots" {
-  count      = var.block_ai_bots != null ? 1 : 0
-  zone_id    = cloudflare_zone.this.id
-  setting_id = "block_ai_bots"
-  value      = local.bool_to_onoff[var.block_ai_bots]
-}
+# Note: browser_integrity_check, bot_fight_mode, and block_ai_bots are not
+# available via the zone settings API. These must be configured manually
+# in the Cloudflare dashboard or via other API endpoints.
 
 resource "cloudflare_zone_setting" "security_level" {
   zone_id    = cloudflare_zone.this.id
