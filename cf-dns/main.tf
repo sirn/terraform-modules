@@ -59,11 +59,7 @@ locals {
       for idx, rr in v.rrdatas : {
         key = "${v.name}/${v.type}/${idx + 1}",
         value = {
-          name = (
-            v.name == "@" ?
-            local.domain_name :
-            "${v.name}.${local.domain_name}"
-          ),
+          name     = v.name,
           type     = v.type,
           ttl      = lookup(v, "proxied", false) ? 1 : v.ttl,
           proxied  = lookup(v, "proxied", false),
