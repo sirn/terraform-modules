@@ -1,8 +1,4 @@
-# Security and content protection settings
-
-# Note: browser_integrity_check, bot_fight_mode, and block_ai_bots are not
-# available via the zone settings API. These must be configured manually
-# in the Cloudflare dashboard or via other API endpoints.
+# Security and content protection settings (Zone Settings API)
 
 resource "cloudflare_zone_setting" "security_level" {
   zone_id    = cloudflare_zone.this.id
@@ -21,3 +17,10 @@ resource "cloudflare_zone_setting" "hotlink_protection" {
   setting_id = "hotlink_protection"
   value      = local.bool_to_onoff[var.hotlink_protection]
 }
+
+# Note: Browser Integrity Check is NOT available via Zone Settings API.
+# It can only be configured via:
+# - Cloudflare Dashboard (Security > Settings)
+# - Configuration Rules API (property name: "bic")
+# To configure via Configuration Rules, create a rule with:
+#   action = "skip" and action_parameters { ruleset = "bic" }

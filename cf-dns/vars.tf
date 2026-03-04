@@ -21,7 +21,7 @@ variable "record_sets" {
 }
 
 # ----------------------------------------
-# Security Settings
+# Security Settings (Zone Settings API)
 # ----------------------------------------
 
 variable "security_level" {
@@ -30,26 +30,27 @@ variable "security_level" {
   default     = "medium"
 }
 
-variable "browser_integrity_check" {
-  description = "Enable browser integrity check"
-  type        = bool
-  default     = true
-}
+# Note: Browser Integrity Check is configured via Configuration Rules, not Zone Settings
+# It must be set up separately if needed.
+
+# ----------------------------------------
+# Bot Management (Separate API)
+# ----------------------------------------
 
 variable "bot_fight_mode" {
-  description = "Enable Bot Fight Mode"
+  description = "Enable Bot Fight Mode (via Bot Management API)"
   type        = bool
   default     = true
 }
 
 variable "block_ai_bots" {
-  description = "Block AI training bots (false = allow AI crawlers)"
+  description = "Block AI training bots via Bot Management API (true = block, false = allow)"
   type        = bool
   default     = true
 }
 
 # ----------------------------------------
-# Content Protection
+# Content Protection (Zone Settings API)
 # ----------------------------------------
 
 variable "email_obfuscation" {
@@ -65,7 +66,7 @@ variable "hotlink_protection" {
 }
 
 # ----------------------------------------
-# SSL/TLS Settings
+# SSL/TLS Settings (Zone Settings API)
 # ----------------------------------------
 
 variable "ssl_mode" {
@@ -87,23 +88,23 @@ variable "automatic_https_rewrites" {
 }
 
 # ----------------------------------------
-# Performance Settings
+# Performance Settings (Zone Settings API)
 # ----------------------------------------
 
 variable "minify_css" {
-  description = "Minify CSS"
+  description = "Minify CSS via Auto Minify"
   type        = bool
   default     = false
 }
 
 variable "minify_js" {
-  description = "Minify JavaScript"
+  description = "Minify JavaScript via Auto Minify"
   type        = bool
   default     = false
 }
 
 variable "minify_html" {
-  description = "Minify HTML"
+  description = "Minify HTML via Auto Minify"
   type        = bool
   default     = false
 }
