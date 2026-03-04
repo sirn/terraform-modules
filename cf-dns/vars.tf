@@ -21,7 +21,35 @@ variable "record_sets" {
 }
 
 # ----------------------------------------
-# Security Settings
+# Feature Flags
+# ----------------------------------------
+
+variable "enable_protection" {
+  description = "Enable content protection settings (security_level, email_obfuscation, hotlink_protection). Requires Zone:Edit permission."
+  type        = bool
+  default     = false
+}
+
+variable "enable_bot_management" {
+  description = "Enable Bot Management (bot_fight_mode, ai_bots_protection). Requires Bot Management:Edit permission (Super Bot Fight Mode or Bot Management subscription)."
+  type        = bool
+  default     = false
+}
+
+variable "enable_ssl" {
+  description = "Enable SSL/TLS settings (ssl, always_use_https, automatic_https_rewrites). Requires Zone:Edit permission."
+  type        = bool
+  default     = false
+}
+
+variable "enable_performance" {
+  description = "Enable performance settings (minify). Requires Zone:Edit permission."
+  type        = bool
+  default     = false
+}
+
+# ----------------------------------------
+# Security Settings (Zone Settings API)
 # ----------------------------------------
 
 variable "security_level" {
@@ -30,26 +58,32 @@ variable "security_level" {
   default     = "medium"
 }
 
-variable "browser_integrity_check" {
-  description = "Enable browser integrity check"
-  type        = bool
-  default     = true
-}
+# Note: Browser Integrity Check is configured via Configuration Rules, not Zone Settings
+# It must be set up separately if needed.
+
+# ----------------------------------------
+# Bot Management (Separate API)
+# ----------------------------------------
 
 variable "bot_fight_mode" {
-  description = "Enable Bot Fight Mode"
+  description = "Enable Bot Fight Mode (via Bot Management API)"
   type        = bool
   default     = true
 }
 
-variable "block_ai_bots" {
-  description = "Block AI training bots (false = allow AI crawlers)"
-  type        = bool
-  default     = true
+variable "ai_bots_protection" {
+  description = "AI bots protection mode (block, disabled, only_on_ad_pages)"
+  type        = string
+  default     = "block"
+
+  validation {
+    condition     = contains(["block", "disabled", "only_on_ad_pages"], var.ai_bots_protection)
+    error_message = "ai_bots_protection must be one of: block, disabled, only_on_ad_pages"
+  }
 }
 
 # ----------------------------------------
-# Content Protection
+# Content Protection (Zone Settings API)
 # ----------------------------------------
 
 variable "email_obfuscation" {
@@ -65,7 +99,7 @@ variable "hotlink_protection" {
 }
 
 # ----------------------------------------
-# SSL/TLS Settings
+# SSL/TLS Settings (Zone Settings API)
 # ----------------------------------------
 
 variable "ssl_mode" {
@@ -87,23 +121,23 @@ variable "automatic_https_rewrites" {
 }
 
 # ----------------------------------------
-# Performance Settings
+# Performance Settings (Zone Settings API)
 # ----------------------------------------
 
 variable "minify_css" {
-  description = "Minify CSS"
+  description = "Minify CSS via Auto Minify"
   type        = bool
   default     = false
 }
 
 variable "minify_js" {
-  description = "Minify JavaScript"
+  description = "Minify JavaScript via Auto Minify"
   type        = bool
   default     = false
 }
 
 variable "minify_html" {
-  description = "Minify HTML"
+  description = "Minify HTML via Auto Minify"
   type        = bool
   default     = false
 }
