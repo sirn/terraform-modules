@@ -122,3 +122,9 @@ variable "serial_port" {
   type        = bool
   default     = false
 }
+
+variable "metadata" {
+  description = "Additional instance metadata to merge into the VM."
+  type        = map(string)
+  default     = {}
+}
