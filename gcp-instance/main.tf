@@ -115,9 +115,12 @@ resource "google_compute_instance" "this" {
     scopes = var.service_account_scopes
   }
 
-  metadata = {
-    serial-port-enable = var.serial_port ? "true" : "false"
-  }
+  metadata = merge(
+    {
+      serial-port-enable = var.serial_port ? "true" : "false"
+    },
+    var.metadata
+  )
 
   lifecycle {
     ignore_changes = [
