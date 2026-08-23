@@ -9,3 +9,9 @@ variable "gcp_region" {
   type        = string
   default     = ""
 }
+
+variable "network_tier" {
+  description = "The networking tier for the external IP. PREMIUM or STANDARD."
+  type        = string
+  default     = "PREMIUM"
+}
