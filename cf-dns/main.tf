@@ -146,7 +146,7 @@ resource "cloudflare_dns_record" "this" {
   proxied  = each.value.proxied
   content  = each.value.flags != null ? null : each.value.rrdata
 
-  tags     = []
+  tags = []
   settings = {
     flatten_cname = false
     ipv4_only     = false

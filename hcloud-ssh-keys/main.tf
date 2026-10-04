@@ -9,7 +9,7 @@ locals {
 }
 
 resource "hcloud_ssh_key" "this" {
-  for_each   = local.keys_from_directory
+  for_each = local.keys_from_directory
 
   name       = each.key
   public_key = each.value

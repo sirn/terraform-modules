@@ -1,5 +1,5 @@
 resource "hcloud_primary_ip" "this" {
-  name          = var.name
+  name = var.name
 
   datacenter    = (var.hcloud_dc != "" && var.primary_address_assignee_id == "") ? var.hcloud_dc : null
   type          = var.primary_address_type
