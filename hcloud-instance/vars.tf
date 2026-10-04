@@ -28,6 +28,15 @@ variable "machine_image" {
   default     = ""
 }
 
+variable "network" {
+  description = "The private subnet and IP for this server."
+  type = object({
+    subnet_id = string
+    ip        = string
+  })
+  default = null
+}
+
 variable "network_ipv4_enabled" {
   description = "Whether to enable IPv4 for the resource."
   type        = bool

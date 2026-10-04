@@ -13,3 +13,7 @@ output "instance_ipv6" {
 output "instance_ipv6_network" {
   value = hcloud_server.this.ipv6_network
 }
+
+output "instance_network_ipv4" {
+  value = var.network != null ? hcloud_server_network.this[0].ip : null
+}

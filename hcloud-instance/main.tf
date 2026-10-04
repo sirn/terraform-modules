@@ -19,3 +19,11 @@ resource "hcloud_server" "this" {
     ]
   }
 }
+
+resource "hcloud_server_network" "this" {
+  count = var.network != null ? 1 : 0
+
+  server_id = hcloud_server.this.id
+  subnet_id = var.network.subnet_id
+  ip        = var.network.ip
+}
