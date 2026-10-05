@@ -3,8 +3,7 @@ resource "hcloud_server" "this" {
   image       = var.machine_image
   server_type = var.machine_type
 
-  location   = (var.hcloud_location != "" && var.hcloud_dc == "") ? var.hcloud_location : null
-  datacenter = var.hcloud_dc != "" ? var.hcloud_dc : null
+  location = var.hcloud_location != "" ? var.hcloud_location : null
 
   public_net {
     ipv4_enabled = var.network_ipv4_enabled

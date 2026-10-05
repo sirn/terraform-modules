@@ -10,12 +10,6 @@ variable "hcloud_location" {
   default     = ""
 }
 
-variable "hcloud_dc" {
-  description = "The Hetzner datacenter for this resource"
-  type        = string
-  default     = ""
-}
-
 variable "machine_type" {
   description = "The machine type for the VM."
   type        = string

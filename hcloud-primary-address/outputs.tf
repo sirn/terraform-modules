@@ -6,8 +6,8 @@ output "primary_address_type" {
   value = hcloud_primary_ip.this.type
 }
 
-output "primary_address_zone" {
-  value = hcloud_primary_ip.this.datacenter
+output "primary_address_location" {
+  value = hcloud_primary_ip.this.location
 }
 
 output "primary_address_ip_address" {

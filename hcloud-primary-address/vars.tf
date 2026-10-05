@@ -3,8 +3,8 @@ variable "name" {
   type        = string
 }
 
-variable "hcloud_dc" {
-  description = "The Hetzner datacenter for this resource"
+variable "hcloud_location" {
+  description = "The Hetzner location for this resource"
   type        = string
   default     = ""
 }

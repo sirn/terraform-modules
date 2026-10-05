@@ -13,6 +13,11 @@ run "without_network" {
     condition     = output.instance_network_ipv4 == null
     error_message = "An unattached server must not have a private IP."
   }
+
+  assert {
+    condition     = hcloud_server.this.location == "fsn1"
+    error_message = "The server must use the requested location."
+  }
 }
 
 run "with_network" {

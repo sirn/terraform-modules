@@ -22,5 +22,7 @@ unchanged. Terraform does not configure the guest interface or routes.
 
 Run `terraform init -backend=false` and `terraform test` in this directory.
 Tests cover no attachment, an attachment, and a first plan with an unknown
-subnet ID. Tests use a mock provider and require Terraform 1.7 or later.
-Module use still requires Terraform 1.5 or later.
+subnet ID. Tests use a mock provider.
+
+Use `hcloud_location`, such as `fsn1`, instead of the removed `hcloud_dc`
+input. Module use requires Terraform 1.14 or later and hcloud 1.68.x.

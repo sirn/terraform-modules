@@ -17,5 +17,5 @@ Terraform creates the attachment, not the guest interface configuration.
 Configure guest IPs and routes separately. Reserve the subnet gateway address.
 
 Run `terraform init -backend=false` and `terraform test` in this directory.
-Tests use a mock provider and do not call Hetzner. Tests require Terraform
-1.7 or later; module use still requires 1.5 or later.
+Tests use a mock provider and do not call Hetzner. Module use requires
+Terraform 1.14 or later and hcloud 1.68.x.
